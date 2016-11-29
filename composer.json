@@ -1,0 +1,25 @@
+{
+	"name" : "nvbooster/sortingmanager",
+	"type" : "library",
+	"description" : "Sorting Manager for SQL/Doctrine",
+	"keywords" : [
+		"sorting helper ui"
+	],
+	"authors" : [{
+			"name" : "Vyacheslav Nechipurenko",
+			"email" : "nvb@aproxima.ru",
+			"homepage" : "https://github.com/nvbooster"
+		}
+	],
+	"autoload" : {
+		"psr-4" : {
+			"nvbooster\\SortingManager\\" : "src"
+		}
+	},
+	"require" : {
+		"php" : ">=5.5",
+		"symfony/options-resolver" : ">=2.5",
+		"symfony/http-foundation" : ">=2.5"
+	},
+	"minimum-stability" : "dev"
+}
