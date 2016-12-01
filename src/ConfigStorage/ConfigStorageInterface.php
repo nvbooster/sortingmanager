@@ -13,9 +13,8 @@ interface ConfigStorageInterface
      * Stores sorting sequence for Config
      *
      * @param ConfigInterface $config
-     * @param array           $sequence
      */
-    public function store(ConfigInterface $config, $sequence = array());
+    public function store(ConfigInterface $config);
 
     /**
      * Retrieve sorting sequence for Config

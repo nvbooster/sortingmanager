@@ -46,8 +46,6 @@ interface ConfigInterface
      * Configure default options for view Control
      *
      * @param OptionsResolver $resolver
-     *
-     * @return OptionsResolver
      */
     public function configureOptions(OptionsResolver $resolver);
 
@@ -98,14 +96,25 @@ interface ConfigInterface
     /**
      * Set column sorting sequence
      *
-     * @return array
+     * @param array $sorting
+     *
+     * @return self
      */
-    public function setSortingSequence();
+    public function setSortingSequence($sorting);
 
     /**
      * Get SortingManager instance
      *
      * @return SortingManagerInterface
      */
-    protected function getManager();
+    public function getManager();
+
+    /**
+     * Register Config in SortingManager
+     *
+     * @param string $name
+     *
+     * @return self
+     */
+    public function register($name = null);
 }

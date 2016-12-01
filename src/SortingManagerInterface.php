@@ -12,9 +12,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 interface SortingManagerInterface
 {
     /**
+     * Get Config options
+     *
+     * @return array
+     */
+    public function getOptions();
+
+    /**
      * Set default options for new Configs
      *
      * @param array $options
+     *
+     * @return self
      */
     public function setOptions($options = array());
 
@@ -33,6 +42,8 @@ interface SortingManagerInterface
      *
      * @param ConfigStorageInterface $storage
      * @param string                 $alias
+     *
+     * @return self
      */
     public function registerStorage(ConfigStorageInterface $storage, $alias = null);
 
@@ -40,9 +51,11 @@ interface SortingManagerInterface
      * Register manually created Config
      *
      * @param ConfigInterface $config
-     * @param string          $alias
+     * @param string          $name
+     *
+     * @return self
      */
-    public function registerConfig(ConfigInterface $config, $alias = null);
+    public function registerConfig(ConfigInterface $config, $name = null);
 
     /**
      * Get data storage
@@ -75,8 +88,6 @@ interface SortingManagerInterface
      * Configure default options
      *
      * @param OptionsResolver $resolver
-     *
-     * @return OptionsResolver
      */
     public function configureOptions(OptionsResolver $resolver);
 
