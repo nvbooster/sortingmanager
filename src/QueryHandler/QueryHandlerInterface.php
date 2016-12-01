@@ -7,10 +7,5 @@ namespace nvbooster\SortingManager\QueryHandler;
  */
 interface QueryHandlerInterface
 {
-    /**
-     * Get related Config instance
-     *
-     * @return ConfigInterface
-     */
-    protected function getConfig();
+
 }

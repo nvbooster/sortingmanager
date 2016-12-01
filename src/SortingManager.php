@@ -76,8 +76,8 @@ class SortingManager implements SortingManagerInterface
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'storage' => 'session',
-            'sort_columns_count' => 2,
+            'storage' => 'array',
+            'sort_columns_count' => 1,
             'param_column' => 'sc',
             'param_order' => 'so',
             'column_ascend_class' => 'sm_asc',
@@ -235,7 +235,7 @@ class SortingManager implements SortingManagerInterface
      */
     public function createControl(ConfigInterface $config)
     {
-        // TODO Auto-generated method stub
+
     }
 
     /**

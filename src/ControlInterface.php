@@ -30,7 +30,7 @@ interface ControlInterface
      *
      * @return int
      */
-    public function isColumnSortable($name);
+    public function isColumnSorted($name);
 
     /**
      * If column with given name described in Config
@@ -39,16 +39,7 @@ interface ControlInterface
      *
      * @return boolean
      */
-    public function isColumnSorted($name);
-
-    /**
-     * Returns field defined for column
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    public function getColumnField($name);
+    public function isColumnSortable($name);
 
     /**
      * Returns view options for column
@@ -58,25 +49,4 @@ interface ControlInterface
      * @return array
      */
     public function getColumnOptions($name);
-
-    /**
-     * Get default options
-     *
-     * @return array
-     */
-    protected function getOptions();
-
-    /**
-     * Get related Config instance
-     *
-     * @return ConfigInterface
-     */
-    protected function getConfig();
-
-    /**
-     * Get column descriptions
-     *
-     * @return array
-     */
-    protected function getColumns();
 }

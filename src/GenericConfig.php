@@ -1,6 +1,6 @@
 <?php
-
 namespace nvbooster\SortingManager;
+
 use nvbooster\SortingManager\ConfigInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +34,11 @@ class GenericConfig implements ConfigInterface
      * @var array
      */
     protected $options;
+
+    /**
+     * @var unknown
+     */
+    protected $resolvedOptions = false;
 
     /**
      * @var array
@@ -134,6 +139,7 @@ class GenericConfig implements ConfigInterface
     public function setOptions($options = array())
     {
         $this->options = array_merge($this->options, $options);
+        $this->resolvedOptions = false;
 
         return $this;
     }
@@ -159,10 +165,13 @@ class GenericConfig implements ConfigInterface
      */
     public function getOptions()
     {
-        $resolver = $this->getOptionsResolver();
-        $options = array_merge($this->manager->getOptions(), $this->options);
+        if ($this->resolvedOptions === false) {
+            $resolver = $this->getOptionsResolver();
+            $options = array_merge($this->manager->getOptions(), $this->options);
+            $this->resolvedOptions = $resolver->resolve($options);
+        }
 
-        return $resolver->resolve($options);
+        return $this->resolvedOptions;
     }
 
     /**
