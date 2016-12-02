@@ -4,6 +4,7 @@ namespace nvbooster\SortingManager;
 use Symfony\Component\HttpFoundation\Request;
 use nvbooster\SortingManager\ConfigStorage\ConfigStorageInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use nvbooster\SortingManager\ConfigStorage\ArrayStorage;
 
 /**
  * @author nvb <nvb@aproxima.ru>
@@ -38,6 +39,8 @@ class SortingManager implements SortingManagerInterface
         $this->storages = array();
         $this->configs = array();
         $this->options = array();
+
+        $this->registerStorage(new ArrayStorage());
 
         if ($options && is_array($options)) {
             $this->setOptions($options);
@@ -88,6 +91,9 @@ class SortingManager implements SortingManagerInterface
 
         $resolver->setAllowedValues(array(
             'storage' => array_keys($this->storages),
+            'sort_columns_count' => function ($value) {
+                return $value > 0;
+            }
         ));
 
         $resolver->setAllowedTypes(array(
@@ -101,7 +107,7 @@ class SortingManager implements SortingManagerInterface
      */
     public function registerConfig(ConfigInterface $config, $name = null)
     {
-        if ($config->getManager() != $this) {
+        if ($config->getManager() !== $this) {
             throw new \LogicException('Config manager doesn\'t match');
         }
 
@@ -152,7 +158,7 @@ class SortingManager implements SortingManagerInterface
      * {@inheritdoc}
      * @see \nvbooster\SortingManager\SortingManagerInterface::setOptions()
      */
-    public function setOptions(array $options = [])
+    public function setOptions($options = array())
     {
         $this->options = array_merge($this->options, $options);
 
@@ -174,7 +180,7 @@ class SortingManager implements SortingManagerInterface
      * {@inheritdoc}
      * @see \nvbooster\SortingManager\SortingManagerInterface::createConfig()
      */
-    public function createConfig($name, array $options = [])
+    public function createConfig($name, $options = array())
     {
         $config = new GenericConfig($this, $options);
         $config->setName($name);
@@ -189,7 +195,6 @@ class SortingManager implements SortingManagerInterface
     public function handleRequest(ConfigInterface $config, Request $request)
     {
         $options = $config->getOptions();
-
 
         if ($column = $request->get($options['param_column'], false)) {
             $sequence = $config->getSortingSequence();
@@ -235,7 +240,48 @@ class SortingManager implements SortingManagerInterface
      */
     public function createControl(ConfigInterface $config)
     {
+        $options = $config->getOptions();
+        $columns = $config->getColumns();
+        $sorting = array_slice($config->getSortingSequence(), 0, $options['sort_columns_count']);
+        $sequence = array();
+        $columnsViewData = array();
+        $resolver = new OptionsResolver();
+        $config->configureColumnOptions($resolver);
 
+        $controlOptions = array_intersect_key($options, array(
+            'param_column' => 1,
+            'param_order' => 1
+        ));
+
+        $options = array_intersect_key($options, array(
+            'column_ascend_class' => 1,
+            'column_descend_class' => 1,
+            'column_sortable_class' => 1,
+            'translation_domain' => 1
+        ));
+
+        $labelTemplate = $config->getName() . '.%s.label';
+
+        foreach ($columns as $columnConfig) {
+            $columnOptions = array_merge($options, $resolver->resolve($columnConfig['options']));
+            if (!isset($columnOptions['label'])) {
+                $columnOptions['label'] =  sprintf($labelTemplate, $columnConfig['name']);
+            }
+
+            $columnsViewData[$columnConfig['name']] = array(
+                'sort_pos' => 0,
+                'sort_order' => 0,
+                'options' => $columnOptions
+            );
+        }
+
+        $i = 1;
+        foreach ($sorting as $column => $order) {
+            $columnsViewData[$column]['sort_order'] = $sequence[$columns[$column]['field']] = ($order > 0) ? 1 : -1;
+            $columnsViewData[$column]['sort_pos'] = $i++;
+        }
+
+        return new Control($columnsViewData, $sequence, $controlOptions);
     }
 
     /**

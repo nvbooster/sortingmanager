@@ -49,4 +49,18 @@ interface ControlInterface
      * @return array
      */
     public function getColumnOptions($name);
+
+    /**
+     * Returns http parameter for sorting column
+     *
+     *  @return string
+     */
+    public function getSortByParam();
+
+    /**
+     * Returns http parameter for sorting order
+     *
+     *  @return string
+     */
+    public function getSortOrderParam();
 }

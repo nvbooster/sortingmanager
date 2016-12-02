@@ -2,6 +2,7 @@
 
 namespace nvbooster\SortingManager;
 use nvbooster\SortingManager\ControlInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author nvb <nvb@aproxima.ru>
@@ -20,13 +21,26 @@ class Control implements ControlInterface
     protected $columns;
 
     /**
+     * @var array
+     */
+    protected $options;
+
+    /**
      * @param array $columns
      * @param array $sequence
+     * @param array $options
      */
-    public function __construct($columns, $sequence)
+    public function __construct($columns, $sequence, $options)
     {
+        $resolver = new OptionsResolver();
+        $resolver->setRequired(array(
+            'param_column',
+            'param_order'
+        ));
+
         $this->columns = $columns;
         $this->sequence = $sequence;
+        $this->options = $resolver->resolve($options);
     }
 
     /**
@@ -84,5 +98,23 @@ class Control implements ControlInterface
     public function getSortingSequence()
     {
         return $this->sequence;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @see \nvbooster\SortingManager\ControlInterface::getSortByParam()
+     */
+    public function getSortByParam()
+    {
+        return $this->options['param_column'];
+    }
+
+    /**
+     * {@inheritdoc}
+     * @see \nvbooster\SortingManager\ControlInterface::getSortOrderParam()
+     */
+    public function getSortOrderParam()
+    {
+        return $this->options['param_order'];
     }
 }

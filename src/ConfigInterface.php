@@ -50,6 +50,13 @@ interface ConfigInterface
     public function configureOptions(OptionsResolver $resolver);
 
     /**
+     * Configure options for columns
+     *
+     * @param OptionsResolver $resolver
+     */
+    public function configureColumnOptions(OptionsResolver $resolver);
+
+    /**
      * Add column description to Config
      *
      * @param string $name
@@ -59,6 +66,11 @@ interface ConfigInterface
      * @return self
      */
     public function addColumn($name, $field, $options = array());
+
+    /**
+     * @return array
+     */
+    public function getColumns();
 
     /**
      * Set default sorting sequense

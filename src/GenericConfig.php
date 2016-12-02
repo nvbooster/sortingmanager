@@ -46,13 +46,19 @@ class GenericConfig implements ConfigInterface
     protected $columns;
 
     /**
+     * @var OptionsResolver
+     */
+    protected $resolver;
+
+    /**
      * @param SortingManager $manager
      * @param array          $options
      */
     public function __construct(SortingManager $manager, $options = array())
     {
         $this->manager = $manager;
-        $this->options = array();
+        $this->options = $options;
+        $this->columns = array();
         $this->defaults = array();
     }
 
@@ -73,6 +79,12 @@ class GenericConfig implements ConfigInterface
      */
     public function setDefaultSorting($sorting = array())
     {
+        foreach (array_keys($sorting) as $column) {
+            if (!key_exists($column, $this->columns)) {
+                unset($sorting[$column]);
+            }
+        }
+
         $this->defaults = $sorting;
 
         return $this;
@@ -107,6 +119,15 @@ class GenericConfig implements ConfigInterface
 
     /**
      * {@inheritdoc}
+     * @see \nvbooster\SortingManager\ConfigInterface::getColumns()
+     */
+    public function getColumns()
+    {
+        return $this->columns;
+    }
+
+    /**
+     * {@inheritdoc}
      * @see \nvbooster\SortingManager\ConfigInterface::getManager()
      */
     public function getManager()
@@ -132,6 +153,22 @@ class GenericConfig implements ConfigInterface
 
     }
 
+
+    /**
+     * {@inheritdoc}
+     * @see \nvbooster\SortingManager\ConfigInterface::configureColumnOptions()
+     */
+    public function configureColumnOptions(OptionsResolver $resolver)
+    {
+        $resolver->setOptional(array(
+            'label',
+            'column_ascend_class',
+            'column_descend_class',
+            'column_sortable_class',
+            'translation_domain'
+        ));
+    }
+
     /**
      * {@inheritdoc}
      * @see \nvbooster\SortingManager\ConfigInterface::setOptions()
@@ -151,7 +188,7 @@ class GenericConfig implements ConfigInterface
     public function setSortingSequence($sorting = array())
     {
         foreach (array_keys($sorting) as $column) {
-            if (key_exists($column, $this->columns)) {
+            if (!key_exists($column, $this->columns)) {
                 unset($sorting[$column]);
             }
         }
@@ -173,6 +210,7 @@ class GenericConfig implements ConfigInterface
 
         return $this->resolvedOptions;
     }
+
 
     /**
      * {@inheritdoc}

@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * @author nvb <nvb@aproxima.ru>
  */
-class DoctrineORMQueryHandler extends SqlQueryHandler
+class DoctrineORMQueryBuilderHandler extends SqlQueryHandler
 {
     /**
      * @param QueryBuilder $qb
@@ -17,7 +17,7 @@ class DoctrineORMQueryHandler extends SqlQueryHandler
     public function modifyQueryBuilder(QueryBuilder $qb)
     {
         foreach ($this->control->getSortingSequence() as $field => $order) {
-            $qb->addOrderBy($field, (($order > 0) ? ' ASC': ' DESC'));
+            $qb->addOrderBy($field, (($order > 0) ? 'ASC': 'DESC'));
         }
 
         return $qb;
