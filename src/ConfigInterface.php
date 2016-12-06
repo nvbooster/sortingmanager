@@ -18,15 +18,6 @@ interface ConfigInterface
     public function getName();
 
     /**
-     * Set config name. For internal use, do not call this after creation
-     *
-     * @param string $name
-     *
-     * @return self
-     */
-    public function setName($name);
-
-    /**
      * Get Config options
      *
      * @return array
@@ -57,30 +48,9 @@ interface ConfigInterface
     public function configureColumnOptions(OptionsResolver $resolver);
 
     /**
-     * Add column description to Config
-     *
-     * @param string $name
-     * @param string $field
-     * @param array  $options
-     *
-     * @return self
-     */
-    public function addColumn($name, $field, $options = array());
-
-    /**
      * @return array
      */
     public function getColumns();
-
-    /**
-     * Set default sorting sequense
-     *
-     * @param array $sorting
-     *
-     * @return self
-     */
-    public function setDefaultSorting($sorting = array());
-
 
     /**
      * Handle request to update this Config's data. Shortcut to SortingManagerInterface::handleRequest

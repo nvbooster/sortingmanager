@@ -23,7 +23,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * @var array
      */
-    protected $options;
+    protected $options = array();
 
     /**
      * @var array
