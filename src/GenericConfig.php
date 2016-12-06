@@ -2,13 +2,11 @@
 namespace nvbooster\SortingManager;
 
 use nvbooster\SortingManager\ConfigInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author nvb <nvb@aproxima.ru>
  */
-class GenericConfig implements ConfigInterface
+class GenericConfig extends AbstractConfig
 {
     /**
      * @var string
@@ -16,39 +14,14 @@ class GenericConfig implements ConfigInterface
     protected $name;
 
     /**
-     * @var SortingManager
-     */
-    protected $manager;
-
-    /**
-     * @var array
-     */
-    protected $defaults;
-
-    /**
-     * @var sorting
-     */
-    protected $sorting = false;
-
-    /**
-     * @var array
-     */
-    protected $options;
-
-    /**
-     * @var unknown
-     */
-    protected $resolvedOptions = false;
-
-    /**
      * @var array
      */
     protected $columns;
 
     /**
-     * @var OptionsResolver
+     * @var array
      */
-    protected $resolver;
+    protected $defaults;
 
     /**
      * @param SortingManager $manager
@@ -69,23 +42,6 @@ class GenericConfig implements ConfigInterface
     public function setName($name)
     {
         $this->name = (string) $name;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::setDefaultSorting()
-     */
-    public function setDefaultSorting($sorting = array())
-    {
-        foreach (array_keys($sorting) as $column) {
-            if (!key_exists($column, $this->columns)) {
-                unset($sorting[$column]);
-            }
-        }
-
-        $this->defaults = $sorting;
 
         return $this;
     }
@@ -128,11 +84,28 @@ class GenericConfig implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::getManager()
+     * @see \nvbooster\SortingManager\ConfigInterface::setDefaultSorting()
      */
-    public function getManager()
+    public function setDefaultSorting($sorting = array())
     {
-        return $this->manager;
+        foreach (array_keys($sorting) as $column) {
+            if (!key_exists($column, $this->getColumns())) {
+                unset($sorting[$column]);
+            }
+        }
+
+        $this->defaults = $sorting;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @see \nvbooster\SortingManager\AbstractConfig::getSortingDefaults()
+     */
+    protected function getSortingDefaults()
+    {
+        return $this->defaults;
     }
 
     /**
@@ -142,123 +115,5 @@ class GenericConfig implements ConfigInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::configureOptions()
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-
-    }
-
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::configureColumnOptions()
-     */
-    public function configureColumnOptions(OptionsResolver $resolver)
-    {
-        $resolver->setOptional(array(
-            'label',
-            'column_ascend_class',
-            'column_descend_class',
-            'column_sortable_class',
-            'translation_domain'
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::setOptions()
-     */
-    public function setOptions($options = array())
-    {
-        $this->options = array_merge($this->options, $options);
-        $this->resolvedOptions = false;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::setSortingSequence()
-     */
-    public function setSortingSequence($sorting = array())
-    {
-        foreach (array_keys($sorting) as $column) {
-            if (!key_exists($column, $this->columns)) {
-                unset($sorting[$column]);
-            }
-        }
-
-        $this->sorting = $sorting;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::getOptions()
-     */
-    public function getOptions()
-    {
-        if ($this->resolvedOptions === false) {
-            $resolver = $this->getOptionsResolver();
-            $options = array_merge($this->manager->getOptions(), $this->options);
-            $this->resolvedOptions = $resolver->resolve($options);
-        }
-
-        return $this->resolvedOptions;
-    }
-
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::handleRequest()
-     */
-    public function handleRequest(Request $request)
-    {
-        $this->manager->handleRequest($this, $request);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::getSortingSequence()
-     */
-    public function getSortingSequence()
-    {
-        return ($this->sorting !== false) ? $this->sorting : $this->defaults;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::createControl()
-     */
-    public function createControl()
-    {
-        return $this->manager->createControl($this);
-    }
-
-    /**
-     * @return OptionsResolver
-     */
-    protected function getOptionsResolver()
-    {
-        if (!$this->resolver) {
-            $this->resolver = new OptionsResolver();
-            $this->configureOptions($this->resolver);
-            $this->manager->configureOptions($this->resolver);
-        }
-
-        return $this->resolver;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \nvbooster\SortingManager\ConfigInterface::register()
-     */
-    public function register($name = null)
-    {
-        $this->manager->registerConfig($this, $name);
     }
 }

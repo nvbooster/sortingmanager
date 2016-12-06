@@ -17,7 +17,7 @@ class DoctrineORMQueryBuilderHandlerTest extends TestCase
 
         $handler = new DoctrineORMQueryBuilderHandler($control);
 
-        self::assertInstanceOf('nvbooster\SortingManager\QueryHandler\DoctrineORMQueryBuilderHandler', $handler);
+        self::assertInstanceOf(DoctrineORMQueryBuilderHandler::class, $handler);
     }
 
     public function testQueryBuilder()

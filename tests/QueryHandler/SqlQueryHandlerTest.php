@@ -16,7 +16,7 @@ class SqlQueryHandlerTest extends TestCase
 
         $handler = new SqlQueryHandler($control);
 
-        self::assertInstanceOf('nvbooster\SortingManager\QueryHandler\SqlQueryHandler', $handler);
+        self::assertInstanceOf(SqlQueryHandler::class, $handler);
     }
 
     public function testRawSql()

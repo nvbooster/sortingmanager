@@ -12,7 +12,7 @@ class ArrayStorageTest extends TestCase
     {
         $storage = new ArrayStorage();
 
-        self::assertInstanceOf('nvbooster\SortingManager\ConfigStorage\ArrayStorage', $storage);
+        self::assertInstanceOf(ArrayStorage::class, $storage);
         self::assertEquals('array', $storage->getAlias());
     }
 
