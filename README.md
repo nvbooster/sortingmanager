@@ -1,4 +1,7 @@
 # SortingManager
+
+1.x for Symfony 2.5.x
+
 Sorting Manager for SQL/Doctrine
 
 Features:
