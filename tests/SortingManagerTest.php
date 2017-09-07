@@ -112,7 +112,7 @@ class SortingManagerTest extends TestCase
 
     public function testExtraOptions()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException::class);
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException::class);
 
         $manager = new SortingManager(array('fakeparam' => 5));
         $manager->getOptions();

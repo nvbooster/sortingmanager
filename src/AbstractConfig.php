@@ -59,13 +59,11 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function configureColumnOptions(OptionsResolver $resolver)
     {
-        $resolver->setOptional(array(
-            'label',
-            'column_ascend_class',
-            'column_descend_class',
-            'column_sortable_class',
-            'translation_domain'
-        ));
+        $resolver->setDefined('label');
+        $resolver->setDefined('column_ascend_class');
+        $resolver->setDefined('column_descend_class');
+        $resolver->setDefined('column_sortable_class');
+        $resolver->setDefined('translation_domain');
     }
 
     /**

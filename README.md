@@ -1,6 +1,6 @@
 # SortingManager
 
-1.x for Symfony 2.5.x
+1.x for Symfony ^2.6 | ^3.0
 
 Sorting Manager for SQL/Doctrine
 

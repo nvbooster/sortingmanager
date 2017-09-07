@@ -64,7 +64,7 @@ class GenericConfigTest extends TestCase
 
     public function testExtraOptions()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException::class);
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException::class);
 
         $manager = new SortingManager();
         $config = new GenericConfig($manager, array('fakeparam' => 5));
@@ -267,7 +267,7 @@ class GenericConfigTest extends TestCase
     }
 
     public function testExtraColumnOptions() {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException::class);
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException::class);
         $resolver = new OptionsResolver();
 
         $manager = new SortingManager();

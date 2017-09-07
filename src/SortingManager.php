@@ -89,16 +89,12 @@ class SortingManager implements SortingManagerInterface
             'translation_domain' => 'sortingmanager'
         ));
 
-        $resolver->setAllowedValues(array(
-            'storage' => array_keys($this->storages),
-            'sort_columns_count' => function ($value) {
-                return $value > 0;
-            }
-        ));
+        $resolver->setAllowedValues('storage', array_keys($this->storages));
+        $resolver->setAllowedValues('sort_columns_count', function ($value) {
+            return $value > 0;
+        });
 
-        $resolver->setAllowedTypes(array(
-            'sort_columns_count' => 'integer',
-        ));
+        $resolver->setAllowedTypes('sort_columns_count', 'integer');
     }
 
     /**

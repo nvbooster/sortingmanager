@@ -26,7 +26,7 @@ class ControlTest extends TestCase
 
     public function testExtraOptions()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException::class);
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException::class);
         $control = new Control(array(), array(), array(
             'param_column' => 'sb',
             'param_order' => 'so',
